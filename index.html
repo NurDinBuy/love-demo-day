@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Совместимость имён</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        .container { max-width: 300px; margin: auto; }
+        input, button { display: block; width: 100%; margin: 10px 0; padding: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container" id="form-container">
+        <input type="text" id="name1" placeholder="Введите первое имя">
+        <input type="text" id="name2" placeholder="Введите второе имя">
+        <button onclick="calculateCompatibility()">Узнать совместимость</button>
+    </div>
+    <div class="container" id="result-container" style="display: none;"></div>
+
+    <script>
+        function getNameValue(name) {
+            return name.toLowerCase()
+                .replace(/[^a-zа-я]/g, '')
+                .split('')
+                .reduce((sum, char) => sum + char.charCodeAt(0), 0);
+        }
+
+        function getNumerologyValue(name) {
+            const numerologyMap = {
+                'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6, 'g': 7, 'h': 8, 'i': 9,
+                'j': 1, 'k': 2, 'l': 3, 'm': 4, 'n': 5, 'o': 6, 'p': 7, 'q': 8, 'r': 9,
+                's': 1, 't': 2, 'u': 3, 'v': 4, 'w': 5, 'x': 6, 'y': 7, 'z': 8,
+                'а': 1, 'б': 2, 'в': 3, 'г': 4, 'д': 5, 'е': 6, 'ё': 7, 'ж': 8, 'з': 9,
+                'и': 1, 'й': 2, 'к': 3, 'л': 4, 'м': 5, 'н': 6, 'о': 7, 'п': 8, 'р': 9,
+                'с': 1, 'т': 2, 'у': 3, 'ф': 4, 'х': 5, 'ц': 6, 'ч': 7, 'ш': 8, 'щ': 9,
+                'ъ': 1, 'ы': 2, 'ь': 3, 'э': 4, 'ю': 5, 'я': 6
+            };
+            return name.toLowerCase()
+                .replace(/[^a-zа-я]/g, '')
+                .split('')
+                .reduce((sum, char) => sum + (numerologyMap[char] || 0), 0);
+        }
+
+        function getCommonLettersBonus(name1, name2) {
+            const set1 = new Set(name1.toLowerCase());
+            const set2 = new Set(name2.toLowerCase());
+            let commonLetters = [...set1].filter(char => set2.has(char)).length;
+            return (commonLetters / Math.max(set1.size, set2.size)) * 20; // Максимум +20% за совпадение букв
+        }
+
+        function getCompatibility(name1, name2) {
+            const value1 = getNameValue(name1) + getNumerologyValue(name1);
+            const value2 = getNameValue(name2) + getNumerologyValue(name2);
+            
+            const baseCompatibility = (Math.min(value1, value2) / Math.max(value1, value2)) * 80; // Максимум 80%
+            const commonBonus = getCommonLettersBonus(name1, name2);
+            const randomFactor = (Math.random() * 10 - 5); // ±5% случайности
+            
+            let finalCompatibility = baseCompatibility + commonBonus + randomFactor;
+            return Math.max(0, Math.min(100, finalCompatibility)).toFixed(2) + '%';
+        }
+
+        function calculateCompatibility() {
+            const name1 = document.getElementById('name1').value.trim();
+            const name2 = document.getElementById('name2').value.trim();
+            
+            if (name1 === '' || name2 === '') {
+                alert('Введите оба имени!');
+                return;
+            }
+            
+            const result = getCompatibility(name1, name2);
+            document.getElementById('form-container').style.display = 'none';
+            document.getElementById('result-container').innerHTML = `<h2>Совместимость ${name1} и ${name2}: ${result}</h2>`;
+            document.getElementById('result-container').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
