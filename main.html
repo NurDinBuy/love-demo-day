@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Совместимость имён и Зодиака</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #ff9966, #ff5e62);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 350px;
+            width: 100%;
+        }
+        input, button {
+            display: block;
+            width: calc(100% - 20px);
+            margin: 10px auto;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+        input {
+            border: 1px solid #ddd;
+        }
+        button {
+            background: #ff5e62;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #ff3b3f;
+        }
+        #result-container {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff5e62;
+            display: none;
+            text-align: center;
+        }
+        #compatibility {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        canvas {
+            max-width: 100%;
+            max-height: 300px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="form-container">
+        <input type="text" id="name1" placeholder="Имя 1">
+        <input type="date" id="birth1">
+        <input type="text" id="name2" placeholder="Имя 2">
+        <input type="date" id="birth2">
+        <button onclick="calculateCompatibility()">Узнать совместимость</button>
+    </div>
+    <div class="container" id="result-container">
+        <h2>Результат</h2>
+        <p id="compatibility"></p>
+        <canvas id="chart" width="300" height="300"></canvas>
+    </div>
+
+    <script>
+        function getZodiac(day, month) {
+            const zodiacs = ["Козерог", "Водолей", "Рыбы", "Овен", "Телец", "Близнецы", "Рак", "Лев", "Дева", "Весы", "Скорпион", "Стрелец"];
+            const dates = [19, 18, 20, 19, 20, 20, 22, 22, 22, 22, 21, 21];
+            return month - (day > dates[month - 1] ? 0 : 1);
+        }
+
+        function getZodiacCompatibility(zodiac1, zodiac2) {
+            const compatibilityMatrix = {
+                "Овен": { "Овен": 70, "Телец": 60, "Рыбы": 50 },
+                "Телец": { "Телец": 80, "Близнецы": 55, "Рак": 75 },
+                "Близнецы": { "Весы": 90, "Водолей": 85, "Козерог": 45 },
+                "Рак": { "Рак": 80, "Скорпион": 75, "Рыбы": 85 },
+                "Лев": { "Лев": 75, "Овен": 80, "Весы": 70 },
+            };
+            return compatibilityMatrix[zodiac1]?.[zodiac2] || 60;
+        }
+
+        function getNameCompatibility(name1, name2) {
+            return Math.floor(Math.random() * 40 + 50); 
+        }
+
+        function calculateCompatibility() {
+            const name1 = document.getElementById('name1').value.trim();
+            const birth1 = document.getElementById('birth1').value;
+            const name2 = document.getElementById('name2').value.trim();
+            const birth2 = document.getElementById('birth2').value;
+
+            if (!name1 || !birth1 || !name2 || !birth2) {
+                alert('Введите все данные!');
+                return;
+            }
+
+            const [year1, month1, day1] = birth1.split('-').map(Number);
+            const [year2, month2, day2] = birth2.split('-').map(Number);
+
+            const zodiac1 = getZodiac(day1, month1);
+            const zodiac2 = getZodiac(day2, month2);
+            const zodiacNames = ["Козерог", "Водолей", "Рыбы", "Овен", "Телец", "Близнецы", "Рак", "Лев", "Дева", "Весы", "Скорпион", "Стрелец"];
+
+            const nameScore = getNameCompatibility(name1, name2);
+            const zodiacScore = getZodiacCompatibility(zodiacNames[zodiac1], zodiacNames[zodiac2]);
+            const finalScore = Math.floor((nameScore + zodiacScore) / 2);
+
+            document.getElementById('compatibility').textContent = `${name1} (${zodiacNames[zodiac1]}) и ${name2} (${zodiacNames[zodiac2]}) имеют совместимость ${finalScore}%`;
+            document.getElementById('form-container').style.display = 'none';
+            document.getElementById('result-container').style.display = 'block';
+            drawChart(finalScore);
+        }
+
+        function drawChart(compatibility) {
+            const ctx = document.getElementById('chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Совместимость', 'Различия'],
+                    datasets: [{
+                        data: [compatibility, 100 - compatibility],
+                        backgroundColor: ['#ff5e62', '#ddd']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 14,
+                                    family: 'Arial, sans-serif'
+                                },
+                                color: '#333'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
