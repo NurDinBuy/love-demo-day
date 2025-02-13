@@ -4,139 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Совместимость имён</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to right, #ff9966, #ff5e62);
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            max-width: 320px;
-            width: 100%;
-            text-align: center;
-        }
-        input, button {
-            display: block;
-            width: calc(100% - 20px);
-            margin: 10px auto;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-        }
-        input {
-            border: 1px solid #ddd;
-        }
-        button {
-            background: #ff5e62;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        button:hover {
-            background: #ff3b3f;
-        }
-        #result-container {
-            font-size: 24px;
-            font-weight: bold;
-            color: #ff5e62;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-    </style>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div class="container" id="form-container">
-        <input type="text" id="name1" placeholder="Введите первое имя">
-        <input type="text" id="name2" placeholder="Введите второе имя">
-        <button onclick="calculateCompatibility()">Узнать совместимость</button>
+    <div class="wrapper">
+        <div class="container" id="form-container">
+            <h2>Love test</h2>
+            <input type="text" id="name1" placeholder="Твое имя">
+            <input type="text" id="name2" placeholder="Имя твоего спутника">
+            <button onclick="calculateCompatibility()">Узнать совместимость</button>
+        </div>
+        <div class="container" id="result-container" style="display: none;">
+            <div class="circle">
+                <div id="percentage">0%</div>
+            </div>
+        </div>
     </div>
-    <div class="container" id="result-container" style="display: none;">
-        <h2>Совместимость</h2>
-        <div id="percentage">0%</div>
-    </div>
-
-    <script>
-        function getCompatibility(name1, name2) {
-            function getNameValue(name) {
-                return name.toLowerCase()
-                    .replace(/[^a-zа-я]/g, '')
-                    .split('')
-                    .reduce((sum, char) => sum + char.charCodeAt(0), 0);
-            }
-            function getNumerologyValue(name) {
-                const numerologyMap = {
-                    'а': 1, 'б': 2, 'в': 3, 'г': 4, 'д': 5, 'е': 6, 'ё': 7, 'ж': 8, 'з': 9,
-                    'и': 1, 'й': 2, 'к': 3, 'л': 4, 'м': 5, 'н': 6, 'о': 7, 'п': 8, 'р': 9,
-                    'с': 1, 'т': 2, 'у': 3, 'ф': 4, 'х': 5, 'ц': 6, 'ч': 7, 'ш': 8, 'щ': 9,
-                    'ъ': 1, 'ы': 2, 'ь': 3, 'э': 4, 'ю': 5, 'я': 6
-                };
-                return name.toLowerCase()
-                    .replace(/[^а-я]/g, '')
-                    .split('')
-                    .reduce((sum, char) => sum + (numerologyMap[char] || 0), 0);
-            }
-            function getCommonLettersBonus(name1, name2) {
-                const set1 = new Set(name1.toLowerCase());
-                const set2 = new Set(name2.toLowerCase());
-                let commonLetters = [...set1].filter(char => set2.has(char)).length;
-                return (commonLetters / Math.max(set1.size, set2.size)) * 20;
-            }
-
-            const value1 = getNameValue(name1) + getNumerologyValue(name1);
-            const value2 = getNameValue(name2) + getNumerologyValue(name2);
-            const baseCompatibility = (Math.min(value1, value2) / Math.max(value1, value2)) * 80;
-            const commonBonus = getCommonLettersBonus(name1, name2);
-            const randomFactor = (Math.random() * 10 - 5);
-            let finalCompatibility = baseCompatibility + commonBonus + randomFactor;
-            return Math.max(0, Math.min(100, finalCompatibility)).toFixed(2);
-        }
-
-        function animatePercentage(finalValue) {
-            let start = 0;
-            const percentageElement = document.getElementById('percentage');
-            percentageElement.textContent = '0%';
-            percentageElement.style.opacity = '1';
-            percentageElement.style.transform = 'scale(1)';
-            
-            const interval = setInterval(() => {
-                if (start >= finalValue) {
-                    percentageElement.textContent = finalValue + '%';
-                    clearInterval(interval);
-                } else {
-                    start++;
-                    percentageElement.textContent = start + '%';
-                }
-            }, 15);
-        }
-
-        function calculateCompatibility() {
-            const name1 = document.getElementById('name1').value.trim();
-            const name2 = document.getElementById('name2').value.trim();
-            
-            if (name1 === '' || name2 === '') {
-                alert('Введите оба имени!');
-                return;
-            }
-            
-            const result = getCompatibility(name1, name2);
-            document.getElementById('form-container').style.display = 'none';
-            document.getElementById('result-container').style.display = 'block';
-            document.getElementById('result-container').style.opacity = '1';
-            document.getElementById('result-container').style.transform = 'scale(1)';
-            animatePercentage(result);
-        }
-    </script>
+    <script src="js/main.js"></script>
 </body>
 </html>
