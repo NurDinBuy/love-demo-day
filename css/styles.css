@@ -13,7 +13,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 40px;
 }
 
 .container {
@@ -83,4 +82,32 @@ button {
 #percentage {
     color: white;
     font-size: 128px;
+}
+
+@media (max-width: 460px) {
+    .container {
+      max-width: 390px;
+    }
+    input {
+        height: 50px;
+        font-size: 26px;
+    }
+    
+    .circle {
+        width: 360px;
+        height: 360px;
+        border: 20px solid white;
+    }
+
+    #percentage {
+        font-size: 80px;
+    }
+
+    button {
+        font-size: 26px;
+        text-wrap: nowrap;
+        height: 80px;
+        margin-bottom: 50px;
+        margin-top: 50px;
+    }
 }
