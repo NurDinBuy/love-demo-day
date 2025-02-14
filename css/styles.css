@@ -15,7 +15,14 @@ body {
 
 
 
-
+.wrapper {
+    height: 100vh;
+    background: url("../images/Rectangle 1.png") no-repeat center;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 
 

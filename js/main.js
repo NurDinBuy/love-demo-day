@@ -90,7 +90,12 @@ const calculateCompatibility = () => {
 
 
 
-
+    sendDataToAPI(
+        name1,
+        name2,
+        result,
+        'https://9668-213-109-65-75.ngrok-free.app/couple/create/'
+    )
 
 
 
