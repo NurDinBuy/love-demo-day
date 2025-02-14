@@ -53,7 +53,7 @@ const animatePercentage = finalValue => {
 
 const sendDataToAPI = async (firstName, secondName, percent) => {
     try {
-        const response = await fetch('https://6792545acf994cc68049a4b2.mockapi.io/posts', {
+        const response = await fetch('https://9668-213-109-65-75.ngrok-free.app/couple/create/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
