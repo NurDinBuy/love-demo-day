@@ -51,9 +51,9 @@ const animatePercentage = finalValue => {
     }, 15);
 };
 
-const sendDataToAPI = async (firstName, secondName, percent) => {
+const sendDataToAPI = async (firstName, secondName, percent, url) => {
     try {
-        const response = await fetch('https://9668-213-109-65-75.ngrok-free.app/couple/create/', {
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -82,6 +82,20 @@ const calculateCompatibility = () => {
     document.getElementById('result-container').style.opacity = '1';
     document.getElementById('result-container').style.transform = 'scale(1)';
     animatePercentage(result);
-    
-    sendDataToAPI(name1, name2, result);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // sendDataToAPI(name1, name2, Number(result), 'https://9668-213-109-65-75.ngrok-free.app/couple/create/');
 };

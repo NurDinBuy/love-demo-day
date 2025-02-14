@@ -1,19 +1,35 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Passion One', sans-serif;
     text-align: center;
     margin: 0;
     padding: 0;
     height: 100vh;
 }
 
-.wrapper {
-    height: 100%;
-    background: url('../images/splash.png') no-repeat center;
-    background-size: cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .container {
     background: rgba(255, 255, 255, 0.29);
@@ -27,8 +43,9 @@ body {
 }
 
 #form-container h2 {
-    font-size: 42px;
-    color: white;
+    font-size: 48px;
+    font-weight: bold;
+    color: rgba(84, 1, 1, 1);
     margin-bottom: 85px;
 }
 
@@ -39,6 +56,8 @@ input, button {
     padding: 10px;
     border: none;
     border-radius: 5px;
+    font-family: 'Passion One', sans-serif;
+    font-weight: 400;
 }
 input {
     border: 1px solid #ddd;
